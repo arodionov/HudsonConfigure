@@ -3,28 +3,34 @@
 import hudson.model.*
 import org.eclipse.hudson.security.team.*
 
-userName = "testUser3"
-userPassword = "123"
-teamName = "T" + userName
-viewName = userName
+def userFullName = "Test Test"
+def userEmail = "andrey.rodionov@gmail.com"
+def userName = "ys14" + userFullName.split(" ")[1].toLowerCase()
+def userPassword = "123"
+def teamName = "T" + userName
+def viewName = userName
 
-hudsonInstance = Hudson.getInstance()
+def hudsonInstance = Hudson.getInstance()
 
 //Create user
-hudsonInstance.securityRealm.createAccount(userName, userPassword)
+def user = hudsonInstance.securityRealm.createAccount(userName, userPassword)
+user.setFullName(userFullName)
+def email_param = new hudson.tasks.Mailer.UserProperty(userEmail)
+user.addProperty(email_param)
+user.save()
 
 //Create team 
-teamManager = hudsonInstance.getTeamManager()
-team = teamManager.createTeam(teamName)
+def teamManager = hudsonInstance.getTeamManager()
+def team = teamManager.createTeam(teamName)
 
 //Add 'admin' as team admin
-teamMemberAdmin = new TeamMember()
+def teamMemberAdmin = new TeamMember()
 teamMemberAdmin.setName("admin")
 teamMemberAdmin.setAsTeamAdmin(true)
 team.addMember(teamMemberAdmin)
 
 //Add user to team
-teamMember = new TeamMember()
+def teamMember = new TeamMember()
 teamMember.setName(userName)
 teamMember.addPermission("create")
 teamMember.addPermission("delete")
@@ -33,7 +39,7 @@ teamMember.addPermission("build")
 team.addMember(teamMember)
 
 //Create view
-listView = new ListView(viewName)
+def listView = new ListView(viewName)
 listView.includeRegex = teamName + ".*"
 hudsonInstance.addView(listView)
 
