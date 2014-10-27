@@ -4,9 +4,9 @@ import hudson.model.*
 import org.eclipse.hudson.security.team.*
 
 def userFullName = "Test Test"
-def userEmail = "andrey.rodionov@gmail.com"
+def userEmail = "test.test@gmail.com"
 def userName = "ys14" + userFullName.split(" ")[1].toLowerCase()
-def userPassword = "123"
+def userPassword = "111"
 def teamName = "T" + userName
 def viewName = userName
 
